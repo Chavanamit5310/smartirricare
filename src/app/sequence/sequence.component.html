@@ -4,7 +4,12 @@
       <div class="card-body">
         <h4>Sequence</h4>
         <div class="row table-responsive mt-3">
-          <table class="table table-bordered mt-2">
+          <table class="table table-bordered mt-2"
+          id="dt1"
+          datatable
+          [dtOptions]="dtOptions"
+          [dtTrigger]="dtTrigger"
+          >
             <thead>
               <tr>
                 <th>Seq Name</th>

@@ -5,7 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AddeditsequenceComponent } from './addeditsequence/addeditsequence.component';
-
+import { DataTablesModule } from "angular-datatables";
 const routes: Routes = [
   {
     path: '',
@@ -46,7 +46,8 @@ const routes: Routes = [
     NgbModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    DataTablesModule
   ]
 })
 export class SequenceModule { }

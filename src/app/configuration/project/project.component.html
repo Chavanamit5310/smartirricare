@@ -266,32 +266,38 @@
                   </div>
  
                   <div class="row table-responsive mt-3">
-                    <table class="table table-bordered mt-2">
+                    <table class="table table-bordered mt-2"
+                    id="dt1"
+                    datatable
+                    [dtOptions]="dtOptions"
+                    [dtTrigger]="dtTrigger1">
                       <thead>
                         <tr>
-                          <th>Node Name</th>
-                          <th>Network No</th>
+                          <!-- <th>Node Name</th>
+                          <th>Network No</th> -->
                           <th>Node No</th>
-                          <th>RTU Id</th>
-                          <th>Description</th>
-                          <th>Product Type</th>
+                          <!-- <th>RTU Id</th>
+                          <th>Description</th> -->
+                          <th>Product Type Id</th>
                           <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr *ngFor="let pos of this.nodeLst">
-                          <td  routerLink="/configuration/node"
+                          <!-- <td  routerLink="/configuration/node"
                           [queryParams]="{ nodeId: pos.id}" class="handCursor">{{ pos.nodeName }}</td>
                           <td  routerLink="/configuration/node"
-                          [queryParams]="{ nodeId: pos.id}" class="handCursor">{{ pos.networkNo }}</td>
+                          [queryParams]="{ nodeId: pos.id}" class="handCursor">{{ pos.networkNo }}</td> -->
                           <td  routerLink="/configuration/node"
-                          [queryParams]="{ nodeId: pos.id}" class="handCursor">{{ pos.nodeNo }}</td>
+                          [queryParams]="{ nodeId: pos.id}" class="handCursor">{{ pos.NodeNo }}</td>
                           <td  routerLink="/configuration/node"
+                          [queryParams]="{ nodeId: pos.id}" class="handCursor">{{ pos.ProductTypeId }}</td>
+                          <!-- <td  routerLink="/configuration/node"
                           [queryParams]="{ nodeId: pos.id}" class="handCursor">{{ pos.rtuId }}</td>
                           <td  routerLink="/configuration/node"
                           [queryParams]="{ nodeId: pos.id}" class="handCursor">{{ pos.description }}</td>
                           <td  routerLink="/configuration/node"
-                          [queryParams]="{ nodeId: pos.id}" class="handCursor">{{ pos.productName }}</td>
+                          [queryParams]="{ nodeId: pos.id}" class="handCursor">{{ pos.productName }}</td> -->
                           <!-- max No Of Node PerNetwork -->
                           <td>
                             <button

@@ -1,10 +1,13 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { ToastService } from 'src/app/component/toast/toast.service';
 import { Network, NetworkDDL, NodeModel, ProductTypes, Project } from './project.model';
 import { ProjectService } from './project.service';
+import { DataTableDirective } from 'angular-datatables';
 
+import { Subject } from 'rxjs';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 @Component({
   selector: 'app-project',
   templateUrl: './project.component.html',
@@ -27,9 +30,37 @@ export class ProjectComponent implements OnInit {
 
   isEditNode: boolean = false;
   nodeId: number = 0;
+    //Datatable
+dtOptions: DataTables.Settings = {};
+dtOptions1: DataTables.Settings = {};
+data: any[] | undefined
+dtTrigger: Subject<any> = new Subject<any>();
+dtTrigger1: Subject<any> = new Subject<any>();
+  dtElements!: QueryList<DataTableDirective>;
+  modalReference!: NgbModalRef;
+
+@ViewChildren(DataTableDirective)
+
+
+@ViewChild(DataTableDirective, { static: false })
+dtElement: DataTableDirective | undefined;
   constructor(private projectService: ProjectService, public toastr: ToastrService, private modalService: NgbModal) { }
 
   ngOnInit(): void {
+    this.dtOptions = {
+      retrieve: true,
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      order: [0, 'desc'],
+      destroy: true,
+      columnDefs: [
+        { "orderable": false, "targets": [2]}
+ 
+       ],
+      //stateSave: true,
+      //processing: true,
+
+    };
     this.getProject();
     this.getNetworks();
     this.getAvailableNetworks();
@@ -103,17 +134,20 @@ export class ProjectComponent implements OnInit {
   }
 
   public getNodeLst(networkId: number) {
+      $('#dt1').DataTable().destroy();
     this.projectService.getNodeList(networkId).subscribe(
       (response: NodeModel[]) => {
         this.nodeLst = response.filter(x => x.networkNo != 0);
+    
         this.nodeLst.forEach(element => {
           element.productName = this.producyTypeLst.filter(x => x.id == element.productTypeId)[0].type;
         });
-
+        this.dtTrigger1.next();
         this.gatewayNodeLst= response.filter(x => x.networkNo == 0);
         this.gatewayNodeLst.forEach(element => {
           element.productName = this.producyTypeLst.filter(x => x.id == element.productTypeId)[0].type;
         });
+
       },
       customError => {
         this.toastr.error(
@@ -264,5 +298,27 @@ export class ProjectComponent implements OnInit {
   declineps(): void {
     this.nodeId = 0;
     this.modalService.dismissAll();
+  }
+  rerender(): void {
+    this.dtElements.forEach((dtElement: DataTableDirective, index: number) => {
+      dtElement.dtInstance.then((dtInstance: any) => {
+        console.log(`The DataTable ${index} instance ID is: ${dtInstance.table().node().id}`);
+      });
+    });
+  }
+  getTabChange(event: any) {
+   // this.rerender();
+    if (event.nextId == "ngb-tab-0") {
+     
+    }
+    if (event.nextId == "ngb-tab-1") {
+      
+    }
+    if (event.nextId == "ngb-tab-2") {
+      this.getNodeLst(0);
+    }
+    if (event.nextId == "ngb-tab-3") {
+      
+    }
   }
 }

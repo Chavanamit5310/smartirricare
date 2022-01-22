@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { SequenceShortViewModel, SequenceValveDataViewModel } from './sequence..model';
 import { SequenceService } from './sequence.service';
-
+import { DataTableDirective } from 'angular-datatables';
+import { Subject } from 'rxjs';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 @Component({
   selector: 'app-sequence',
   templateUrl: './sequence.component.html',
@@ -12,16 +14,46 @@ import { SequenceService } from './sequence.service';
 export class SequenceComponent implements OnInit {
   seqLst: SequenceShortViewModel[] = [];
   seqValve:SequenceValveDataViewModel[]=[];
+  //Datatable
+dtOptions: DataTables.Settings = {};
+dtOptions1: DataTables.Settings = {};
+data: any[] | undefined
+dtTrigger: Subject<any> = new Subject<any>();
+dtTrigger1: Subject<any> = new Subject<any>();
+
+modalReference: NgbModalRef | undefined;
+
+@ViewChildren(DataTableDirective)
+dtElements: QueryList<DataTableDirective> | undefined;
+
+@ViewChild(DataTableDirective, { static: false })
+dtElement: DataTableDirective | undefined;
   constructor(public router: Router, private sequenceService: SequenceService, public toastr: ToastrService) { }
 
   ngOnInit(): void {
+    this.dtOptions = {
+      retrieve: true,
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      order: [1, 'desc'],
+      destroy: true,
+      columnDefs: [
+        { "orderable": false, "targets": [4]}
+ 
+       ],
+      //stateSave: true,
+      //processing: true,
+
+    };
     this.getSequences();
   }
 
   getSequences() {
+    $('#dt1').DataTable().destroy();
     this.sequenceService.getSequenceList(0).subscribe(
       (response: SequenceShortViewModel[]) => {
         this.seqLst = response;
+        this.dtTrigger.next();
       },
       customError => {
         this.toastr.error(

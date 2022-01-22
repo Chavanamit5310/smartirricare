@@ -15,7 +15,7 @@ import { NodelivedataComponent } from './nodesconfiguration/nodelivedata/nodeliv
 import { UploadconfigurationComponent } from './uploadconfiguration/uploadconfiguration.component';
 import { NgxFileDropModule } from 'ngx-file-drop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-
+import { DataTablesModule } from "angular-datatables";
 
 const routes: Routes = [
   {
@@ -93,7 +93,8 @@ const routes: Routes = [
     FontAwesomeModule,
     ReactiveFormsModule,
     NgxFileDropModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    DataTablesModule
   ],
   exports: [RouterModule],
 })
